@@ -34,16 +34,17 @@ pipeline {
         }
 
         // tests run by maven
+        // NOTE: add -s settings wherever there is mvn command to ensure maven takes in from nexus repositories
         stage('TEST') {
             steps {
-                sh 'mvn test'
+                sh 'mvn -s settings.xml test'
             }
         }
 
         // this checks source code quality like what all can be improved in the code
         stage ('Checkstyle Analysis') {
             steps {
-                sh 'mvn checkstyle:checkstyle'
+                sh 'mvn -s settings.xml checkstyle:checkstyle'
             }
         }
     }
