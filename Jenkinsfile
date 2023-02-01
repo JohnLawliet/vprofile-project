@@ -58,7 +58,8 @@ pipeline {
                 //fields provided with -Dsonar are parameters that can be passed to sonarqube scanner. Find ind docs
                 //the reports can be found in the workspace of each successful deployment within target directory created after successful deployment. Note that files like surefire-report, jacoco, checkstyle are received from above test stages
                 withSonarQubeEnv ("${SONARSERVER}") {
-                    sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectName=vprofile \
+                    sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+                    -Dsonar.projectName=vprofile \
                     -Dsonar.projectVersion=1.0 \
                     -Dsonar.sources=src/ \
                     -Dsonar.java.binaries=target/test-classes/com/visualpathit/account \
