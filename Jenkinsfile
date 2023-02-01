@@ -17,6 +17,8 @@ pipeline {
         NEXUSPORT = '8081'
         NEXUS_GRP_REPO = 'vpro-maven-group'
         NEXUS_LOGIN = 'nexuslogin'
+        SONARSERVER = 'sonarserver'
+        SONARSCANNER = 'sonarscanner' 
     }
 
     stages {
@@ -45,6 +47,28 @@ pipeline {
         stage ('Checkstyle Analysis') {
             steps {
                 sh 'mvn -s settings.xml checkstyle:checkstyle'
+            }
+        }
+
+        stage ('Sonar Analysis') {
+            environment {
+                scannerHome = tool "${SONARSCANNER}"
+            }
+            steps {
+                //fields provided with -Dsonar are parameters that can be passed to sonarqube scanner. Find ind docs
+                //the reports can be found in the workspace of each successful deployment within target directory created after successful deployment. Note that files like surefire-report, jacoco, checkstyle are received from above test stages
+                withSonarQubeEnv ("${SONARSERVER}") {
+                    sh '''  
+                    $(scannerHome)/bin/sonar-scanner
+                    -Dsonar.projectName=vprofile \
+                    -Dsonar.projectVersion=1.0 \
+                    -Dsonar.sources=src/ \
+                    -Dsonar.java.binaries=target/test-classes/com/visualpathit/account \
+                    -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                    -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                    -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
+                    '''
+                }
             }
         }
     }
