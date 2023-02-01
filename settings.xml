@@ -5,32 +5,32 @@
 
   <servers>
     <server>
-      <id>${SNAPREPO}</id>
-      <username>${NEXUSUSER}</username>
-      <password>${NEXUSPASS}</password>
+      <id>${SNAP_REPO}</id>
+      <username>${NEXUS_USER}</username>
+      <password>${NEXUS_PASS}</password>
     </server>
     <server>
-      <id>${RELEASEREPO}</id>
-      <username>${NEXUSUSER}</username>
-      <password>${NEXUSPASS}</password>
+      <id>${RELEASE_REPO}</id>
+      <username>${NEXUS_USER}</username>
+      <password>${NEXUS_PASS}</password>
     </server>
         <server>
-        <id>${CENTRALREPO}</id>
-      <username>${NEXUSUSER}</username>
-      <password>${NEXUSPASS}</password>
+        <id>${CENTRAL_REPO}</id>
+      <username>${NEXUS_USER}</username>
+      <password>${NEXUS_PASS}</password>
     </server>
     <server>
-        <id>${NEXUSGRPREPO}</id>
-      <username>${NEXUSUSER}</username>
-      <password>${NEXUSPASS}</password>
+        <id>${NEXUS_GRP_REPO}</id>
+      <username>${NEXUS_USER}</username>
+      <password>${NEXUS_PASS}</password>
     </server>
   </servers>
 
   <mirrors>
     <mirror>
-      <id>${CENTRALREPO}</id>
-      <name>${CENTRALREPO}</name>
-      <url>http://${NEXUSIP}:${NEXUSPORT}/repository/${NEXUSGRPREPO}/</url>
+      <id>${CENTRAL_REPO}</id>
+      <name>${CENTRAL_REPO}</name>
+      <url>http://${NEXUSIP}:${NEXUSPORT}/repository/${NEXUS_GRP_REPO}/</url>
       <mirrorOf>*</mirrorOf>
     </mirror>
   </mirrors>
