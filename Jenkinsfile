@@ -24,6 +24,27 @@ pipeline {
             steps {
                 sh 'mvn -s settings.xml -DskipTests install'
             }
+            // if success, archive all wars
+            post {
+                success {
+                    echo "Now archiving..."
+                    archiveArtifacts artifacts: '**/*.war'
+                }
+            }
+        }
+
+        // tests run by maven
+        stage('TEST') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        // this checks source code quality like what all can be improved in the code
+        stage ('Checkstyle Analysis') {
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
         }
     }
 }
