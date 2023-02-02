@@ -78,5 +78,27 @@ pipeline {
                 }
             }
         }
+
+        //Note: the steps content here is copy pasted from github docs for jenkins plugin nexusArtifactuploader plugin
+        //jenkins has built in variables like BUILD_ID, BUILD_TIMESTAMP which needs to be accessed via env.<var name>. Build ID is the nth number of time, the source code got deployed
+        stage ('Upload Artifact') {
+            steps {
+                nexusArtifactUploader(
+                    nexusVersion: 'nexus3',
+                    protocol: 'http',
+                    nexusUrl: "${NEXUSIP}:${NEXUSPORT}",
+                    groupId: 'QA',
+                    version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
+                    repository: "${RELEASE_REPO}",
+                    credentialsId: "${NEXUS_LOGIN}",
+                    artifacts: [
+                        [artifactId: 'vproapp',
+                        classifier: '',
+                        file: 'target/vprofile-v2.war',
+                        type: 'war']
+                    ]
+                )
+            }
+        }
     }
 }
