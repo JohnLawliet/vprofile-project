@@ -10,29 +10,6 @@ pipeline {
     tools {
         maven "MAVEN3"
         jdk "OracleJDK8"
-        jfrog 'jfrog-cli'
-    }
-
-    stages {
-        stage ('Testing') {
-            steps {
-                // Show the installed version of JFrog CLI.
-                jf '-v'
-                
-                // Show the configured JFrog Platform instances.
-                jf 'c show'
-                
-                // Ping Artifactory.
-                jf 'rt ping'
-                
-                // Create a file and upload it to a repository named 'my-repo' in Artifactory
-                sh 'touch test-file'
-                jf 'rt u test-file my-repo/'
-                
-                // Publish the build-info to Artifactory.
-                jf 'rt bp'
-            }
-        }
     }
 
     // environment {
@@ -48,6 +25,27 @@ pipeline {
     //     SONARSERVER = 'sonarserver'
     //     SONARSCANNER = 'sonarscanner' 
     // }
+
+    environment {
+
+        CI = true
+        ARTIFACTORY_ACCESS_TOKEN = credentials('jfrogtoken')
+    }
+
+    stages {
+        stage ('Checkout Git Repository') {
+            steps {
+                git branch: 'artifactory', url: 'https://github.com/JohnLawliet/vprofile-project.git'
+            }
+        }
+        stage ('Build maven job') {
+            steps {
+                sh 'mvn -s settings.xml install'
+            }
+        }
+    }
+
+    
 
     // stages {
     //     // stage('FETCH CODE') {
