@@ -30,6 +30,7 @@ pipeline {
 
         CI = true
         ARTIFACTORY_ACCESS_TOKEN = credentials('jfrogtoken')
+        JFROG_PASSWORD = credentials('jfrog-password')
     }
 
     stages {
@@ -40,7 +41,7 @@ pipeline {
         }
         stage ('Build maven job') {
             steps {
-                sh 'mvn -s settings.xml install'
+                sh './mvn install'
             }
         }
     }
