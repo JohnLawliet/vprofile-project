@@ -24,6 +24,13 @@ pipeline {
         NEXUS_LOGIN = 'nexuslogin'
         SONARSERVER = 'sonarserver'
         SONARSCANNER = 'sonarscanner' 
+        
+        // credentials for docker and ECR
+        // registry credential has to start with 'ecr:', region taken from ec2 instance url <region:>, aws credentials in jenkins (awscreds)
+        // appregistry is taken as the endpoint registry generated after creating ecr
+        registryCredential = 'ecr:us-east-1'
+        appRegistry = "965098331841.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg"
+        vprofileRegistry = "https://965098331841.dkr.ecr.us-east-1.amazonaws.com"
     }
 
     stages {
@@ -110,6 +117,26 @@ pipeline {
                         type: 'war']
                     ]
                 )
+            }
+        }
+
+        //stage for building docker imagea
+        stage ('Build docker image') {
+            steps {
+                script {
+                    dockerImage = docker.build(appRegistry + ":$BUILD_NUMBER", "./Docker-files/app/multistage/")
+                }
+            }
+        }
+
+        stage ('Upload App image to ECR') {
+            steps {
+                script {
+                    docker.withRegistry(vprofileRegistry, registryCredential){
+                        dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push("latest")
+                    }
+                }
             }
         }
     }
