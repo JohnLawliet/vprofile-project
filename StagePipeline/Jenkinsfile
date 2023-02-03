@@ -28,7 +28,7 @@ pipeline {
         // credentials for docker and ECR
         // registry credential has to start with 'ecr:', region taken from ec2 instance url <region:>, aws credentials in jenkins (awscreds)
         // appregistry is taken as the endpoint registry generated after creating ecr
-        registryCredential = 'ecr:us-east-1'
+        registryCredential = 'ecr:us-east-1:awscreds'
         appRegistry = "965098331841.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg"
         vprofileRegistry = "https://965098331841.dkr.ecr.us-east-1.amazonaws.com"
     }
